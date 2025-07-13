@@ -1,0 +1,25 @@
+# student.py
+
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def __str__(self):
+        return f"{self.name}: {self.marks}"
+
+    def grade(self):
+        if self.marks >= 90:
+            return "A+"
+        elif self.marks >= 80:
+            return "A"
+        elif self.marks >= 70:
+            return "B"
+        elif self.marks >= 60:
+            return "C"
+        elif self.marks >= 50:
+            return "D"
+        elif self.marks >= 40:
+            return "E"
+        else:
+            return "F"
