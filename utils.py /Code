@@ -1,0 +1,37 @@
+# utils.py
+
+from student import Student
+import functools
+
+def save_to_file(students, filename="gradebook.txt"):
+    with open(filename, "w") as f:
+        for s in students:
+            f.write(f"{s.name},{s.marks}\n")
+    print("💾 Data saved to", filename)
+
+def load_from_file(filename="gradebook.txt"):
+    students = []
+    try:
+        with open(filename, "r") as f:
+            for line in f:
+                try:
+                    name, marks = line.strip().split(",")
+                    students.append(Student(name, float(marks)))
+                except:
+                    continue
+    except FileNotFoundError:
+        print("No saved gradebook found.")
+    return students
+
+def show_grades(students):
+    for s in students:
+        print(f"{s.name}: {s.grade()}")
+
+def sort_students_by_marks(students):
+    return sorted(students, key=lambda s: s.marks, reverse=True)
+
+def class_average(students):
+    if not students:
+        return 0
+    total = functools.reduce(lambda x, y: x + y.marks, students, 0)
+    return total / len(students)
