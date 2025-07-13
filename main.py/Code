@@ -1,0 +1,85 @@
+# main.py
+
+from student import Student
+from utils import save_to_file, load_from_file, show_grades, sort_students_by_marks, class_average
+
+print("📚 SmartGrade System by G.D")
+
+subjects = {}
+
+# Collect subjects and students
+while True:
+    subject = input("\n📘 Enter subject name (or 'q' to quit): ")
+    if subject.lower() in ['q', 'quit']:
+        break
+
+    students = []
+    while True:
+        name = input(f"\nEnter student name for {subject} (or 'done'): ")
+        if name.lower() == 'done':
+            break
+        try:
+            marks = float(input(f"Enter marks for {name} in {subject}: "))
+            students.append(Student(name, marks))
+        except ValueError:
+            print("❌ Invalid marks.")
+    subjects[subject] = students
+
+# Show Results
+print("\n📊 RESULTS:\n")
+for subject, students in subjects.items():
+    print(f"📘 Subject: {subject.capitalize()}")
+    for s in students:
+        print(f" - {s.name} got {s.marks} → Grade: {s.grade()}")
+
+    if students:
+        avg = class_average(students)
+        print(f"📈 Average for {subject}: {round(avg, 2)}")
+    else:
+        print("No students in this subject.")
+    print("--------------------------------------------------")
+
+# Merge all students
+all_students = []
+for students in subjects.values():
+    all_students.extend(students)
+
+# Sort and Save
+if all_students:
+    sorted_students = sort_students_by_marks(all_students)
+    print("\n🏆 Sorted by Marks:")
+    for s in sorted_students:
+        print(s)
+
+    names = [s.name for s in sorted_students]
+    print("\n🧾 All Student Names:", names)
+
+    save_to_file(all_students)
+
+# Load & Menu
+students = load_from_file()
+
+while True:
+    print("\n🔘 MENU")
+    print("1. Add student")
+    print("2. Show grades")
+    print("3. Save")
+    print("4. Load")
+    print("5. Exit")
+
+    choice = input("Select: ")
+    if choice == "1":
+        name = input("Enter name: ")
+        try:
+            marks = float(input("Enter marks: "))
+            students.append(Student(name, marks))
+        except:
+            print("Invalid marks.")
+    elif choice == "2":
+        show_grades(students)
+    elif choice == "3":
+        save_to_file(students)
+    elif choice == "4":
+        students = load_from_file()
+    elif choice == "5":
+        break
